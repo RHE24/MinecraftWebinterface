@@ -243,12 +243,12 @@ if($screen == "ViewMessage") {
 if($action == "SetWorker") {
 $id = isset($_GET['id']) ? $_GET['id'] : false;
 $member = $_SESSION['user'];
-$sql->query("UPDATE `mc`.`support_tickets` SET member = '$member' WHERE supportID='$id'");
+$sql->query("UPDATE `support_tickets` SET supporter = '$member' WHERE ticketID='$id'");
 echo "<div class='alert alert-info'>You're now the worker of this ticket.</div>";
 }
 if($action == "SetClosed") {
 $id = isset($_GET['id']) ? $_GET['id'] : false;
-$sql->query("UPDATE support_tickets SET status = 0 WHERE supportID='$id'");
+$sql->query("UPDATE support_tickets SET status = 0 WHERE ticketID='$id'");
 echo "<div class='alert alert-info'>You closed this ticket.</div>";
 }
 if($action == "Answer") {
@@ -260,7 +260,7 @@ $timestamp = date("d.m.Y H:i");
 $member = $_SESSION['user'];
 $usera = "";
 $id = isset($_GET['id']) ? $_GET['id'] : false;
-$sql->query("INSERT INTO `support_answers` (`supportID`, `usera`, `userm`, `text`, `timestamp`) VALUES ('$id', '', '$member', '$answer', '$timestamp');");
+$sql->query("INSERT INTO `support_answers` (`supportID`, `usera`, `supporter`, `text`, `timestamp`) VALUES ('$id', '', '$member', '$answer', '$timestamp');");
 $sql->query("UPDATE `support_tickets` SET read = 0 WHERE supportID='$id'");
 echo "<div class='alert alert-info'>Your answer was sent.</div>";
 }
@@ -268,24 +268,23 @@ echo "<div class='alert alert-info'>Your answer was sent.</div>";
 ?>
 <?php
 $id = isset($_GET['id']) ? $_GET['id'] : false;
-$info = mysqli_fetch_object($sql->query("SELECT * FROM support_tickets WHERE supportID='$id' ORDER BY supportID ASC"));
-$status = $info->status;
-if($status == 0) { $status = "Geschlossen"; } elseif($status == 1) { $status = "Offen"; } else { echo "Unbekannter Status"; }
-echo "<h1>Support-Ticket #".$info->supportID.": ".$info->title." | Status: ".$status."</h1>";
-echo "by ".$info->user. " Date: ".$info->timestamp." |Worker: ".$info->member.'<div class="row">';
-if($info->member == "Nobody") {
+$info = mysqli_fetch_object($sql->query("SELECT * FROM support_tickets WHERE ticketID='$id'"));
+$status = $sql->query("UPDATE support_tickets SET status = 0 WHERE ticketID='$id'");
+if($status == 0) { $status = "Closed"; } elseif($status == 1) { $status = "Open"; } else { echo "Unknown"; }
+echo "<div class='row'>";
+if($info->supporter == "Nobody") {
 ?>
 
 <div class="col-lg-2">
 <?php echo '<form action="acp.php?page=Support&screen=ViewMessage&id='.$id.'&action=SetWorker" method="POST">'; ?>
   <div class="form-group">
-      <button type="submit" class="btn btn-primary">Set yourself as Worker</button>
+      <button type="submit" class="btn btn-primary">Set yourself as Supporter</button>
   </div>
 </form>
 </div>
 <?php
 }
-if($status == 1) { ?>
+if($status == 0) { ?>
 <div class="col-lg-2">
 <?php echo'<form action="acp.php?page=Support&screen=ViewMessage&id='.$id.'&action=SetClosed" method="POST">'; ?>
   <div class="form-group">
@@ -295,21 +294,31 @@ if($status == 1) { ?>
 </div>
 
 <?php
-}
-echo "</div><hr>";
-echo "<div class='well'>";
+} 
+echo "</div>";
+echo "<h1>Support-Ticket #".$info->ticketID.": <em>".$info->title."</em> &#8226; Status: $status &#8226; Supporter: ".$info->supporter."</h1>";
+echo '<div class="panel panel-primary">
+<div class="panel-heading">                            
+<h3 class="panel-title">';
+echo "by ".$info->user. " am ".$info->timestamp."</h3>";
+echo "</div>";
+echo '<div class="panel-body">';
 echo nl2br($info->text);
-echo "</div><br />";
+echo "</div></div><br />";      
 $query = $sql->query("SELECT * FROM support_answers WHERE supportID='$id'");
 while($row = mysqli_fetch_object($query)) {
-echo "<div class='well'>";
-if($row->usera == "") {
-echo "Written by ".$row->userm. " Date: ".$row->timestamp."<hr>";
-} elseif($row->userm == "") {
-echo "Written by ".$row->usera. " Date: ".$row->timestamp."<hr>";
+echo '<div class="panel panel-primary">
+<div class="panel-heading"                            
+<h3 class="panel-title">';
+if($row->user == "") {
+echo "Written by ".$row->supporter. " Date: ".$row->timestamp;
+} elseif($row->supporter == "") {
+echo "Written by ".$row->user. " Date: ".$row->timestamp;
 }
+echo '</div>
+<div class="panel-body">';
 echo nl2br($row->text);
-echo "</div>";
+echo "</div></div>";
 }
 echo "<div class='well'>";
 ?>
@@ -330,7 +339,7 @@ echo "<div class='well'>";
 else
 {
 ?>
-<h1>Support-Bereich</h1>
+<h1>Support</h1>
 <div class="alert alert-info">You can answer support tickets written by user here.</div>
 <hr>
 <div class="row">
@@ -349,16 +358,16 @@ Worker
 </div>
 </div>
 <?php
-$query = $sql->query("SELECT * FROM support_tickets WHERE status=1");
+$query = $sql->query("SELECT * FROM support_tickets WHERE status=0");
 while($row = mysqli_fetch_object($query)) {
 echo '<div class="row">
-<div class="col-lg-6"><a href="acp.php?page=Support&screen=ViewMessage&id='.$row->supportID.'">'.$row->title."</a>";
+<div class="col-lg-6"><a href="acp.php?page=Support&screen=ViewMessage&id='.$row->ticketID.'">'.$row->title."</a>";
 echo '</div>
 <div class="col-lg-3">';
 echo $row->user;
 echo '</div>
 <div class="col-lg-3">';
-echo $row->member;
+echo $row->supporter;
 echo '</div>
 </div>';
 }
