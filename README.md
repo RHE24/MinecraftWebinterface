@@ -35,5 +35,11 @@ You are not allowed to remove the Copyright on the bottom site, every remove wil
 You are allowed to use it and edit it, but the Copyright will remain there!
 
 
+Contact
+=====================
+If you want contact NowNewStart and the team, connect to our IRC Channel.
+Server: irc.freenode.net
+Channel: #nnsinterface
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/NowNewStart/minecraftwebinterface/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
