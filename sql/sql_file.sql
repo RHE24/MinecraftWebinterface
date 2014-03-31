@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 31. Mrz 2014 um 16:15
+-- Erstellungszeit: 31. Mrz 2014 um 16:49
 -- Server Version: 5.5.35
 -- PHP-Version: 5.4.4-14+deb7u8
 
@@ -252,6 +252,39 @@ CREATE TABLE IF NOT EXISTS `Stats_player` (
   PRIMARY KEY (`counter`),
   UNIQUE KEY `no_duplicates` (`player`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `support_answers`
+--
+
+CREATE TABLE IF NOT EXISTS `support_answers` (
+  `supportID` int(15) NOT NULL,
+  `user` varchar(200) NOT NULL,
+  `supporter` varchar(200) NOT NULL,
+  `text` text NOT NULL,
+  `timestamp` varchar(500) NOT NULL,
+  KEY `supportID` (`supportID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `support_tickets`
+--
+
+CREATE TABLE IF NOT EXISTS `support_tickets` (
+  `ticketID` int(15) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `user` varchar(200) NOT NULL,
+  `supporter` varchar(200) NOT NULL,
+  `text` text NOT NULL,
+  `timestamp` varchar(500) NOT NULL,
+  `status` int(15) NOT NULL,
+  `read` int(15) NOT NULL,
+  PRIMARY KEY (`ticketID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
