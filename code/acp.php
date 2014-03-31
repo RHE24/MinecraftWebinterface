@@ -199,13 +199,14 @@ else
 {
 if($page == "News") {
 if($action == "Perform") {
-$post = $sql->real_escape_string($_POST['post']);
+$post = $sql->real_escape_string(htmlspecialchars($_POST['post']));
+$title = $sql->real_escape_string(htmlspecialchars($_POST['title']));
 if(empty($post)) {
 echo "<div class='alert alert-danger'>You didn't enter something</div>";
 } else {
-$timestamp = date("d.m.Y H:i");
+$timestamp = date("Y-m-d H:i");
 $user = $_SESSION['user'];
-$sql->query("INSERT INTO `news` (`poster` ,`text` ,`timestamp` )VALUES ('$user', '$post', '$timestamp');");
+$sql->query("INSERT INTO `news` (`author` ,`title`,`text` ,`timestamp` )VALUES ('$user','$title', '$post', '$timestamp');");
 echo "<div class='alert alert-info'>You successfully sent a news article.</div>";
 }
 }
@@ -214,9 +215,15 @@ echo "<div class='alert alert-info'>You successfully sent a news article.</div>"
 <hr>
 <form action="acp.php?page=News&action=Perform" method="POST" role="form" class="form-horizontal">
   <div class="form-group">
-    <label for="post"  class="col-sm-2 control-label">Post News:</label>
+    <label for="title" class="col-sm-2 control-label">Title</label>
     <div class="col-sm-10">
-    <textarea name="post" id="user" placeholder="Post news" class="form-control2" style="height: 200px;"></textarea>
+    <input type="text" name="title" id="title" placeholder="Title" class="form-control2" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="post"  class="col-sm-2 control-label">Content</label>
+    <div class="col-sm-10">
+    <textarea name="post" id="user" placeholder="Content" class="form-control2" style="height: 200px;"></textarea>
     </div>
   </div>
   <div class="form-group">
