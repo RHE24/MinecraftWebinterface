@@ -43,7 +43,6 @@ $players = "Error";
   </div>
 </nav>
 
-<img src="img/banner.png" style="width: 100%;"/>
 
 
 <div class="container" style="margin-top: 10px; padding-top: 10px;">
@@ -120,9 +119,14 @@ else
 <?php
 $query = $sql->query("SELECT * FROM news ORDER BY newsID DESC LIMIT 5");
 while($row = mysqli_fetch_object($query)) {
-echo "<div class='well'>";
-echo "Written by ".$row->poster." Date: ".$row->timestamp." <hr>";
-echo nl2br($row->text)."<br />";
+echo '
+<div class="panel panel-primary">
+<div class="panel-heading"                            
+<h3 class="panel-title"><strong>'.$row->title.'</strong> <small>posted by '.$row->author.' at '.$row->timestamp.'</small></h3>
+</div>
+<div class="panel-body">';
+echo nl2br($row->text);
+echo "</div>";
 echo "</div>";
 }
 ?>
