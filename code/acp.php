@@ -92,10 +92,14 @@ echo "<div class='alert alert-info'>Command succesfully performed.</div>";
   </div>
 </form>
 <?php
-echo "<h2>Log</h2>";
-echo "<div class='well'>";
+echo '
+<div class="panel panel-primary">
+<div class="panel-heading"                            
+<h3 class="panel-title">Log</h3>
+</div>
+<div class="panel-body">';
 echo "<iframe src='log.php' id='logFrame' width='100%' height='400px;' style='border: none;'>Your browser does not allow iFrames.</iframe>";
-echo "</div>";
+echo "</div></div>";
 }
 else
 {
