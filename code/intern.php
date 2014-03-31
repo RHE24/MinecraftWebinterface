@@ -65,7 +65,6 @@ include_once 'Websend.php';
   </div>
 </nav>
 <?php if($page == "Dynmap") {} else { ?>
-<img src="img/banner.png" style="width: 100%;"/>
  <?php } ?>
 
 <div class="container" style="margin-top: 10px; padding-top: 10px;">
